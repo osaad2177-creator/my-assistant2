@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Assistant</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: #f5f5f5;
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.box {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>📅 My Assistant</h1>
+
+<div class="container">
+
+  <!-- Calendar -->
+  <div class="box">
+    <iframe 
+    src="https://calendar.google.com/calendar/embed?src=YOUR_LINK"
+    width="500" height="400">
+    </iframe>
+  </div>
+
+  <!-- Tasks -->
+  <div class="box">
+    <h3>Tasks</h3>
+    <input id="taskInput" placeholder="Write task">
+    <button onclick="addTask()">Add</button>
+    <ul id="list"></ul>
+  </div>
+
+</div>
+
+<script>
+function addTask() {
+  let input = document.getElementById("taskInput");
+  let li = document.createElement("li");
+  li.textContent = input.value;
+  document.getElementById("list").appendChild(li);
+  input.value = "";
+}
+</script>
+
+</body>
+</html>
