@@ -31,14 +31,13 @@
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
     body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background var(--transition),color var(--transition);line-height:1.6}
-
-    /* ===== LOGIN SCREEN ===== */
     #loginScreen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.4s ease}
     #loginScreen.hidden{opacity:0;pointer-events:none}
     .login-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:2.5rem 2rem;width:90%;max-width:380px;box-shadow:var(--shadow-lg);text-align:center}
     .login-logo{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:600;margin-bottom:0.25rem}
     .login-logo span{color:var(--accent)}
-    .login-sub{font-size:0.82rem;color:var(--text-muted);margin-bottom:2rem}
+    .login-sub{font-size:0.82rem;color:var(--text-muted);margin-bottom:0.6rem}
+    .fb-badge{display:inline-flex;align-items:center;gap:0.35rem;background:#fff3e0;color:#e65100;font-size:0.71rem;font-weight:700;padding:0.2rem 0.7rem;border-radius:20px;margin-bottom:1.6rem;border:1px solid #ffcc80}
     .login-fields{display:flex;flex-direction:column;gap:0.9rem;text-align:left;margin-bottom:1.25rem}
     .login-label{font-size:0.75rem;color:var(--text-muted);display:block;margin-bottom:4px}
     .login-input{width:100%;padding:0.65rem 1rem;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;transition:border-color var(--transition)}
@@ -46,16 +45,21 @@
     .login-btn{width:100%;padding:0.72rem;border-radius:var(--radius-sm);border:none;background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;transition:filter var(--transition)}
     .login-btn:hover{filter:brightness(1.1)}
     .login-error{font-size:0.78rem;color:var(--danger);margin-top:0.5rem;min-height:1.1rem;text-align:center}
-    .login-theme{position:absolute;top:1rem;right:1rem;width:44px;height:24px;background:var(--border);border-radius:12px;border:none;cursor:pointer;position:fixed;top:1rem;right:1rem;transition:background var(--transition)}
+    .login-theme{width:44px;height:24px;background:var(--border);border-radius:12px;border:none;cursor:pointer;position:fixed;top:1rem;right:1rem;transition:background var(--transition)}
     .login-theme::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;background:var(--surface);border-radius:50%;transition:transform var(--transition);box-shadow:0 1px 4px rgba(0,0,0,0.2)}
     [data-theme="dark"] .login-theme{background:var(--accent)}
     [data-theme="dark"] .login-theme::after{transform:translateX(20px)}
-
-    /* ===== HEADER ===== */
+    /* SYNC */
+    .sync-pill{display:flex;align-items:center;gap:0.38rem;padding:0.18rem 0.6rem;border-radius:20px;border:1px solid var(--border);background:var(--surface-2);font-size:0.71rem;color:var(--text-muted)}
+    .sync-dot{width:7px;height:7px;border-radius:50%;background:var(--success);flex-shrink:0;transition:background 0.3s}
+    .sync-pill.syncing .sync-dot{background:var(--warn);animation:blink 0.7s ease-in-out infinite}
+    .sync-pill.error   .sync-dot{background:var(--danger)}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+    /* HEADER */
     header{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow);transition:background var(--transition),border-color var(--transition)}
     .logo{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:600;letter-spacing:-0.02em}
     .logo span{color:var(--accent)}
-    .header-right{display:flex;align-items:center;gap:1rem}
+    .header-right{display:flex;align-items:center;gap:0.85rem}
     .greeting{font-size:0.85rem;color:var(--text-muted)}
     .greeting strong{color:var(--text);font-weight:500}
     .bell-btn{position:relative;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;transition:all var(--transition)}
@@ -71,23 +75,15 @@
     [data-theme="dark"] .toggle-icon.sun{opacity:0} [data-theme="dark"] .toggle-icon.moon{opacity:1}
     .logout-btn{padding:0.35rem 0.8rem;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface-2);color:var(--text-muted);font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer;transition:all var(--transition)}
     .logout-btn:hover{background:var(--danger-soft);color:var(--danger);border-color:var(--danger)}
-
-    /* ===== NOTIF BANNER ===== */
     .notif-banner{background:var(--warn-soft);border-bottom:1px solid var(--warn);padding:0.55rem 2rem;display:none;align-items:center;gap:1rem;font-size:0.82rem}
     .notif-banner.show{display:flex}
     .notif-banner strong{color:var(--warn)}
-
-    /* ===== LAYOUT ===== */
     main{max-width:1400px;margin:0 auto;padding:2rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5rem}
-
-    /* ===== CARD ===== */
     .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);transition:background var(--transition),border-color var(--transition),box-shadow var(--transition);overflow:hidden}
     .card:hover{box-shadow:var(--shadow-lg)}
     .card-header{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.4rem;border-bottom:1px solid var(--border)}
     .card-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;display:flex;align-items:center;gap:0.5rem}
     .card-body{padding:1.1rem 1.4rem}
-
-    /* ===== STATS ===== */
     .stats-bar{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,1fr);gap:1rem}
     .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.2rem;display:flex;align-items:center;gap:0.8rem;box-shadow:var(--shadow);transition:all var(--transition)}
     .stat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
@@ -96,20 +92,14 @@
     [data-theme="dark"] .si-warm{background:#2e2814}
     .stat-value{font-size:1.45rem;font-weight:600;font-family:'Playfair Display',serif;line-height:1}
     .stat-label{font-size:0.72rem;color:var(--text-muted);margin-top:2px;white-space:nowrap}
-
-    /* ===== QUICK ACTIONS ===== */
     .quick-actions{grid-column:1/-1;display:flex;align-items:center;gap:0.65rem;flex-wrap:wrap}
     .qa-label{font-size:0.76rem;color:var(--text-muted);font-weight:500;letter-spacing:0.08em;text-transform:uppercase}
-
-    /* ===== BUTTONS ===== */
     .btn{display:inline-flex;align-items:center;gap:0.45rem;padding:0.52rem 1rem;border-radius:var(--radius-sm);border:none;font-family:'DM Sans',sans-serif;font-size:0.84rem;font-weight:500;cursor:pointer;transition:all var(--transition);white-space:nowrap}
     .btn-primary{background:var(--accent);color:#fff} .btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
     .btn-secondary{background:var(--accent-2);color:#fff} .btn-secondary:hover{filter:brightness(1.1);transform:translateY(-1px)}
     .btn-ghost{background:var(--surface-2);color:var(--text);border:1px solid var(--border)} .btn-ghost:hover{background:var(--border)}
     .btn-sm{padding:0.35rem 0.8rem;font-size:0.78rem}
     .btn-xs{padding:0.22rem 0.55rem;font-size:0.72rem}
-
-    /* ===== INPUTS ===== */
     .input-field{padding:0.58rem 0.95rem;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.88rem;transition:border-color var(--transition),background var(--transition);outline:none;width:100%}
     .input-field:focus{border-color:var(--accent)}
     .input-field::placeholder{color:var(--text-muted)}
@@ -119,8 +109,6 @@
     .textarea-field::placeholder{color:var(--text-muted)}
     .field-label{font-size:0.76rem;color:var(--text-muted);display:block;margin-bottom:4px}
     .field-group{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
-
-    /* ===== TASK MANAGER ===== */
     .task-card{grid-column:1/3}
     .row{display:flex;gap:0.5rem;margin-bottom:0.6rem;flex-wrap:wrap}
     .task-reminder-hint{font-size:0.76rem;color:var(--text-muted);display:flex;align-items:center;gap:0.4rem;margin-bottom:0.85rem;flex-wrap:wrap}
@@ -153,8 +141,6 @@
     .task-del{width:23px;height:23px;border-radius:5px;border:none;background:transparent;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.72rem;transition:all var(--transition);flex-shrink:0}
     .task-del:hover{background:var(--danger-soft);color:var(--danger)}
     .count-badge{background:var(--accent-soft);color:var(--accent);font-size:0.7rem;font-weight:600;padding:0.1rem 0.48rem;border-radius:10px}
-
-    /* ===== REMINDERS ===== */
     .reminders-card{grid-column:3/4;grid-row:3/5}
     .rem-list{list-style:none;display:flex;flex-direction:column;gap:0.45rem;max-height:480px;overflow-y:auto;padding-right:2px}
     .rem-list::-webkit-scrollbar{width:4px} .rem-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
@@ -172,8 +158,6 @@
     .rem-cd{font-weight:600;color:var(--accent-2)}
     .rem-cd.soon{color:var(--warn)} .rem-cd.fired{color:var(--success)}
     .rem-notes{font-size:0.76rem;color:var(--text-muted);margin-top:0.2rem;font-style:italic}
-
-    /* ===== CLOCK ===== */
     .clock-card{grid-column:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1.6rem 1.4rem}
     .clock-display{font-family:'Playfair Display',serif;font-size:2.7rem;font-weight:600;letter-spacing:-0.03em;line-height:1}
     .clock-display .colon{color:var(--accent)}
@@ -181,8 +165,6 @@
     .clock-date{font-size:0.8rem;color:var(--text-muted);margin-top:0.35rem}
     .clock-div{width:34px;height:2px;background:var(--border);border-radius:1px;margin:0.8rem auto}
     .clock-year{font-size:0.73rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);font-weight:600}
-
-    /* ===== NOTES ===== */
     .notes-card{grid-column:1/3}
     .notes-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.45rem;max-height:180px;overflow-y:auto;margin-bottom:0.85rem}
     .notes-grid::-webkit-scrollbar{width:4px} .notes-grid::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
@@ -194,14 +176,10 @@
     .note-del{background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:0.7rem;padding:2px 4px;border-radius:4px;transition:all var(--transition)}
     .note-del:hover{color:var(--danger);background:var(--danger-soft)}
     .notes-input-row{display:flex;gap:0.5rem}
-
-    /* ===== CALENDAR ===== */
     .calendar-card{grid-column:1/3}
     .cal-wrap{border-radius:var(--radius-sm);overflow:hidden;background:var(--surface-2);border:1px solid var(--border)}
     .cal-wrap iframe{width:100%;border:none;display:block;min-height:460px}
     .cal-note{margin-top:0.65rem;font-size:0.74rem;color:var(--text-muted);display:flex;align-items:center;gap:0.35rem}
-
-    /* ===== MODAL ===== */
     .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;z-index:1000;opacity:0;pointer-events:none;transition:opacity var(--transition)}
     .modal-overlay.open{opacity:1;pointer-events:all}
     .modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem;width:90%;max-width:440px;box-shadow:var(--shadow-lg);transform:translateY(18px);transition:transform var(--transition)}
@@ -209,8 +187,6 @@
     .modal-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600;margin-bottom:1.1rem}
     .modal-fields{display:flex;flex-direction:column;gap:0.8rem;margin-bottom:1.3rem}
     .modal-footer{display:flex;gap:0.65rem;justify-content:flex-end}
-
-    /* ===== ALERT POPUP ===== */
     .alert-popup{position:fixed;top:1.5rem;left:50%;transform:translateX(-50%) translateY(-120px);z-index:3000;background:var(--surface);border:2px solid var(--warn);border-radius:var(--radius);box-shadow:var(--shadow-lg);padding:1.2rem 1.4rem;max-width:360px;width:90%;display:flex;flex-direction:column;gap:0.6rem;transition:transform 0.45s cubic-bezier(0.34,1.56,0.64,1)}
     .alert-popup.show{transform:translateX(-50%) translateY(0)}
     .alert-header{display:flex;align-items:center;gap:0.7rem}
@@ -219,67 +195,40 @@
     .alert-title{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:600}
     .alert-body{font-size:0.83rem;color:var(--text-muted);white-space:pre-line}
     .alert-footer{display:flex;gap:0.5rem;justify-content:flex-end}
-
-    /* ===== EMPTY ===== */
     .empty-state{text-align:center;padding:1.8rem 1rem;color:var(--text-muted)}
     .empty-icon{font-size:1.9rem;margin-bottom:0.4rem}
     .empty-state p{font-size:0.8rem}
-
-    /* ===== TOAST ===== */
     .toast-container{position:fixed;bottom:1.4rem;right:1.4rem;z-index:2000;display:flex;flex-direction:column;gap:0.45rem;pointer-events:none}
     .toast{background:var(--text);color:var(--surface);padding:0.62rem 1.05rem;border-radius:var(--radius-sm);font-size:0.82rem;box-shadow:var(--shadow-lg);opacity:0;transform:translateX(20px);transition:all 0.3s ease;max-width:280px}
     .toast.show{opacity:1;transform:translateX(0)}
-
     ::-webkit-scrollbar{width:6px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
     .fade-in{animation:fadeUp 0.45s ease both}
     @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
     .fade-in:nth-child(1){animation-delay:0.05s}.fade-in:nth-child(2){animation-delay:0.10s}.fade-in:nth-child(3){animation-delay:0.15s}.fade-in:nth-child(4){animation-delay:0.20s}.fade-in:nth-child(5){animation-delay:0.25s}.fade-in:nth-child(6){animation-delay:0.30s}.fade-in:nth-child(7){animation-delay:0.35s}.fade-in:nth-child(8){animation-delay:0.40s}
-
-    @media(max-width:1100px){
-      main{grid-template-columns:1fr 1fr}
-      .stats-bar{grid-template-columns:repeat(3,1fr)}
-      .task-card,.reminders-card,.notes-card,.calendar-card{grid-column:1/3}
-      .reminders-card{grid-row:auto}
-      .clock-card{grid-column:1/3;flex-direction:row;gap:2rem;justify-content:flex-start;padding:1.4rem}
-      .clock-div{width:2px;height:38px;margin:0}
-    }
-    @media(max-width:660px){
-      main{grid-template-columns:1fr;padding:1rem;gap:1rem}
-      .stats-bar{grid-template-columns:1fr 1fr}
-      .task-card,.reminders-card,.notes-card,.clock-card,.calendar-card{grid-column:1}
-      header{padding:0 1rem}
-      .greeting{display:none}
-      .notes-grid{grid-template-columns:1fr}
-    }
+    @media(max-width:1100px){main{grid-template-columns:1fr 1fr}.stats-bar{grid-template-columns:repeat(3,1fr)}.task-card,.reminders-card,.notes-card,.calendar-card{grid-column:1/3}.reminders-card{grid-row:auto}.clock-card{grid-column:1/3;flex-direction:row;gap:2rem;justify-content:flex-start;padding:1.4rem}.clock-div{width:2px;height:38px;margin:0}}
+    @media(max-width:660px){main{grid-template-columns:1fr;padding:1rem;gap:1rem}.stats-bar{grid-template-columns:1fr 1fr}.task-card,.reminders-card,.notes-card,.clock-card,.calendar-card{grid-column:1}header{padding:0 1rem}.greeting{display:none}.notes-grid{grid-template-columns:1fr}}
     @media(max-width:420px){.stats-bar{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
 
-<!-- ===== LOGIN SCREEN ===== -->
 <button class="login-theme" id="loginThemeBtn" aria-label="Toggle theme"></button>
+
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo">Æther<span>.</span></div>
     <p class="login-sub">Your personal assistant — sign in to continue</p>
+    <div class="fb-badge">🔥 Firebase Cloud Sync Active</div>
     <div class="login-fields">
-      <div>
-        <label class="login-label">Username</label>
-        <input class="login-input" id="loginUser" type="text" placeholder="e.g. aether_u01" autocomplete="off" />
-      </div>
-      <div>
-        <label class="login-label">Password</label>
-        <input class="login-input" id="loginPass" type="password" placeholder="Your password" onkeydown="if(event.key==='Enter')doLogin()" />
-      </div>
+      <div><label class="login-label">Username</label><input class="login-input" id="loginUser" type="text" placeholder="e.g. aether_u01" autocomplete="off" /></div>
+      <div><label class="login-label">Password</label><input class="login-input" id="loginPass" type="password" placeholder="Your password" onkeydown="if(event.key==='Enter')doLogin()" /></div>
     </div>
     <button class="login-btn" onclick="doLogin()">Sign In →</button>
     <div class="login-error" id="loginError"></div>
   </div>
 </div>
 
-<!-- ===== APP (hidden until login) ===== -->
 <div id="appShell" style="display:none">
-
   <div class="notif-banner" id="notifBanner">
     🔔 <strong>Enable notifications</strong> so Æther can alert you even when the tab is in the background.
     <button class="btn btn-sm btn-primary" onclick="requestNotifPermission()">Enable</button>
@@ -289,14 +238,10 @@
   <header>
     <div class="logo">Æther<span>.</span></div>
     <div class="header-right">
+      <div class="sync-pill" id="syncPill"><div class="sync-dot"></div><span id="syncText">Synced</span></div>
       <p class="greeting">Good <span id="timeOfDay">morning</span>, <strong id="headerName">—</strong> 👋</p>
-      <button class="bell-btn" id="bellBtn" title="Upcoming reminders" onclick="scrollToReminders()">
-        🔔<span class="bell-badge" id="bellBadge">0</span>
-      </button>
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-        <span class="toggle-icon sun">☀️</span>
-        <span class="toggle-icon moon">🌙</span>
-      </button>
+      <button class="bell-btn" onclick="scrollToReminders()">🔔<span class="bell-badge" id="bellBadge">0</span></button>
+      <button class="theme-toggle" id="themeToggle"><span class="toggle-icon sun">☀️</span><span class="toggle-icon moon">🌙</span></button>
       <button class="logout-btn" onclick="doLogout()">Sign out</button>
     </div>
   </header>
@@ -312,41 +257,22 @@
 
     <div class="quick-actions fade-in" style="grid-column:1/-1">
       <span class="qa-label">Quick Actions</span>
-      <button class="btn btn-primary"   onclick="openModal('call')">📞 Schedule Call</button>
+      <button class="btn btn-primary" onclick="openModal('call')">📞 Schedule Call</button>
       <button class="btn btn-secondary" onclick="openModal('meeting')">📅 Schedule Meeting</button>
-      <button class="btn btn-ghost"     onclick="openModal('reminder')">⏰ Set Reminder</button>
-      <button class="btn btn-ghost"     onclick="openModal('deadline')">🚨 Set Deadline</button>
-      <button class="btn btn-ghost"     onclick="clearCompleted()">🧹 Clear Done</button>
+      <button class="btn btn-ghost" onclick="openModal('reminder')">⏰ Set Reminder</button>
+      <button class="btn btn-ghost" onclick="openModal('deadline')">🚨 Set Deadline</button>
+      <button class="btn btn-ghost" onclick="clearCompleted()">🧹 Clear Done</button>
     </div>
 
     <div class="card task-card fade-in">
-      <div class="card-header">
-        <div class="card-title">✅ Task Manager <span class="count-badge" id="pendingBadge">0 pending</span></div>
-      </div>
+      <div class="card-header"><div class="card-title">✅ Task Manager <span class="count-badge" id="pendingBadge">0 pending</span></div></div>
       <div class="card-body">
+        <div class="row"><input type="text" class="input-field" id="taskInput" placeholder="Add a new task…" style="flex:1" onkeydown="if(event.key==='Enter') addTask()" /><button class="btn btn-primary btn-sm" onclick="addTask()">+ Add</button></div>
         <div class="row">
-          <input type="text" class="input-field" id="taskInput" placeholder="Add a new task…" style="flex:1" onkeydown="if(event.key==='Enter') addTask()" />
-          <button class="btn btn-primary btn-sm" onclick="addTask()">+ Add</button>
+          <select class="input-field" id="taskPriority" style="flex:0 0 auto;width:120px"><option value="medium">⬤ Medium</option><option value="high">🔴 High</option><option value="low">🟢 Low</option></select>
+          <select class="input-field" id="taskCategory" style="flex:0 0 auto;width:130px"><option value="Work">Work</option><option value="Personal">Personal</option><option value="Health">Health</option><option value="Finance">Finance</option><option value="Other">Other</option></select>
         </div>
-        <div class="row">
-          <select class="input-field" id="taskPriority" style="flex:0 0 auto;width:120px">
-            <option value="medium">⬤ Medium</option>
-            <option value="high">🔴 High</option>
-            <option value="low">🟢 Low</option>
-          </select>
-          <select class="input-field" id="taskCategory" style="flex:0 0 auto;width:130px">
-            <option value="Work">Work</option>
-            <option value="Personal">Personal</option>
-            <option value="Health">Health</option>
-            <option value="Finance">Finance</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-        <div class="row" style="align-items:center">
-          <label class="field-label" style="white-space:nowrap;margin:0">⏰ Remind at:</label>
-          <input type="datetime-local" class="input-field" id="taskRemindAt" style="flex:1" />
-          <button class="btn btn-ghost btn-xs" onclick="document.getElementById('taskRemindAt').value=''">✕</button>
-        </div>
+        <div class="row" style="align-items:center"><label class="field-label" style="white-space:nowrap;margin:0">⏰ Remind at:</label><input type="datetime-local" class="input-field" id="taskRemindAt" style="flex:1" /><button class="btn btn-ghost btn-xs" onclick="document.getElementById('taskRemindAt').value=''">✕</button></div>
         <p class="task-reminder-hint">Leave blank for no alarm &nbsp;·&nbsp; or use <strong>Quick Actions</strong> for full scheduling</p>
         <div class="task-filters">
           <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
@@ -360,47 +286,30 @@
       </div>
     </div>
 
-    <div class="card clock-card fade-in" id="clockCard">
-      <div class="clock-display">
-        <span id="cH">00</span><span class="colon">:</span><span id="cM">00</span><span class="clock-secs" id="cS">:00</span>
-      </div>
+    <div class="card clock-card fade-in">
+      <div class="clock-display"><span id="cH">00</span><span class="colon">:</span><span id="cM">00</span><span class="clock-secs" id="cS">:00</span></div>
       <div class="clock-date" id="cDate">—</div>
       <div class="clock-div"></div>
       <div class="clock-year" id="cYear">2026</div>
     </div>
 
     <div class="card reminders-card fade-in" id="remindersSection">
-      <div class="card-header">
-        <div class="card-title">⏰ Reminders &amp; Alarms</div>
-        <button class="btn btn-ghost btn-sm" onclick="openModal('reminder')">+ New</button>
-      </div>
-      <div class="card-body">
-        <ul class="rem-list" id="reminderList"></ul>
-      </div>
+      <div class="card-header"><div class="card-title">⏰ Reminders &amp; Alarms</div><button class="btn btn-ghost btn-sm" onclick="openModal('reminder')">+ New</button></div>
+      <div class="card-body"><ul class="rem-list" id="reminderList"></ul></div>
     </div>
 
     <div class="card notes-card fade-in">
       <div class="card-header"><div class="card-title">📝 Quick Notes</div></div>
       <div class="card-body">
         <div class="notes-grid" id="notesList"></div>
-        <div class="notes-input-row">
-          <input type="text" class="input-field" id="noteInput" placeholder="Jot something down… (Enter)" onkeydown="if(event.key==='Enter') addNote()" />
-          <button class="btn btn-secondary btn-sm" onclick="addNote()">💾</button>
-        </div>
+        <div class="notes-input-row"><input type="text" class="input-field" id="noteInput" placeholder="Jot something down… (Enter)" onkeydown="if(event.key==='Enter') addNote()" /><button class="btn btn-secondary btn-sm" onclick="addNote()">💾</button></div>
       </div>
     </div>
 
     <div class="card calendar-card fade-in">
-      <div class="card-header">
-        <div class="card-title">📅 Google Calendar</div>
-        <a href="https://calendar.google.com" target="_blank" class="btn btn-ghost btn-sm">Open ↗</a>
-      </div>
+      <div class="card-header"><div class="card-title">📅 Google Calendar</div><a href="https://calendar.google.com" target="_blank" class="btn btn-ghost btn-sm">Open ↗</a></div>
       <div class="card-body">
-        <div class="cal-wrap">
-          <iframe id="calIframe"
-            src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=Africa%2FCairo&bgcolor=%23ffffff&showTitle=0&showNav=1&showPrint=0&showTabs=1&showCalendars=0&mode=WEEK"
-            frameborder="0" scrolling="no" title="Google Calendar"></iframe>
-        </div>
+        <div class="cal-wrap"><iframe id="calIframe" src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=Africa%2FCairo&bgcolor=%23ffffff&showTitle=0&showNav=1&showPrint=0&showTabs=1&showCalendars=0&mode=WEEK" frameborder="0" scrolling="no" title="Google Calendar"></iframe></div>
         <p class="cal-note">🔒 Sign in to Google Calendar to see your personal events.</p>
       </div>
     </div>
@@ -410,300 +319,342 @@
     <div class="modal">
       <div class="modal-title" id="mTitle">Set Reminder</div>
       <div class="modal-fields" id="mFields"></div>
-      <div class="modal-footer">
-        <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-        <button class="btn btn-primary" onclick="saveModal()">💾 Save &amp; Set Alarm</button>
-      </div>
+      <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveModal()">💾 Save &amp; Set Alarm</button></div>
     </div>
   </div>
 
   <div class="alert-popup" id="alertPopup">
-    <div class="alert-header">
-      <div class="alert-ring" id="aIcon">🔔</div>
-      <div>
-        <div class="alert-title" id="aTitle">Reminder</div>
-        <div class="alert-body"  id="aBody">You have an event.</div>
-      </div>
-    </div>
-    <div class="alert-footer">
-      <button class="btn btn-ghost btn-sm" onclick="snoozeAlert()">😴 Snooze 5 min</button>
-      <button class="btn btn-primary btn-sm" onclick="dismissAlert()">Got it ✓</button>
-    </div>
+    <div class="alert-header"><div class="alert-ring" id="aIcon">🔔</div><div><div class="alert-title" id="aTitle">Reminder</div><div class="alert-body" id="aBody">You have an event.</div></div></div>
+    <div class="alert-footer"><button class="btn btn-ghost btn-sm" onclick="snoozeAlert()">😴 Snooze 5 min</button><button class="btn btn-primary btn-sm" onclick="dismissAlert()">Got it ✓</button></div>
   </div>
 
   <div class="toast-container" id="toastContainer"></div>
+</div>
 
-</div><!-- /appShell -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+import {
+  getFirestore, collection, doc,
+  addDoc, setDoc, deleteDoc,
+  onSnapshot, query, orderBy,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
 
-<script>
-/* ===================== ACCOUNTS ===================== */
+/* ── FIREBASE INIT ── */
+const firebaseConfig = {
+  apiKey:            "AIzaSyABWDNOHFYAjflnVbCiR5r8l45rxyPcBgI",
+  authDomain:        "assistant-1e054.firebaseapp.com",
+  projectId:         "assistant-1e054",
+  storageBucket:     "assistant-1e054.firebasestorage.app",
+  messagingSenderId: "516130884600",
+  appId:             "1:516130884600:web:ae60fa24ef4386935e240d",
+  measurementId:     "G-Z9JHK6DT3R"
+};
+const fbApp = initializeApp(firebaseConfig);
+const db    = getFirestore(fbApp);
+
+/* ── ACCOUNTS ── */
 const ACCOUNTS = {
-  'aether_u01': { pass: 'Sky#Mint92',    name: 'User 01' },
-  'aether_u02': { pass: 'Blue@Rock47',   name: 'User 02' },
-  'aether_u03': { pass: 'Sand!Cove81',   name: 'User 03' },
-  'aether_u04': { pass: 'Dusk$Wave33',   name: 'User 04' },
-  'aether_u05': { pass: 'Flint%Star56',  name: 'User 05' },
-  'aether_u06': { pass: 'Volt^Leaf74',   name: 'User 06' },
-  'aether_u07': { pass: 'Nova&Tide22',   name: 'User 07' },
-  'aether_u08': { pass: 'Pike*Moon65',   name: 'User 08' },
-  'aether_u09': { pass: 'Crest(Fire39',  name: 'User 09' },
-  'aether_u10': { pass: 'Halo)Storm88',  name: 'User 10' },
+  'aether_u01':{ pass:'Sky#Mint92',   name:'User 01' },
+  'aether_u02':{ pass:'Blue@Rock47',  name:'User 02' },
+  'aether_u03':{ pass:'Sand!Cove81',  name:'User 03' },
+  'aether_u04':{ pass:'Dusk$Wave33',  name:'User 04' },
+  'aether_u05':{ pass:'Flint%Star56', name:'User 05' },
+  'aether_u06':{ pass:'Volt^Leaf74',  name:'User 06' },
+  'aether_u07':{ pass:'Nova&Tide22',  name:'User 07' },
+  'aether_u08':{ pass:'Pike*Moon65',  name:'User 08' },
+  'aether_u09':{ pass:'Crest(Fire39', name:'User 09' },
+  'aether_u10':{ pass:'Halo)Storm88', name:'User 10' },
 };
 
-/* ===================== THEME (works on login screen too) ===================== */
+/* ── THEME ── */
 const html = document.documentElement;
-html.setAttribute('data-theme', localStorage.getItem('ae_theme') || 'light');
-
-function toggleTheme() {
-  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+html.setAttribute('data-theme', localStorage.getItem('ae_theme')||'light');
+function toggleTheme(){
+  const next = html.getAttribute('data-theme')==='dark'?'light':'dark';
   html.setAttribute('data-theme', next);
   localStorage.setItem('ae_theme', next);
-  try {
-    const bg = next === 'dark' ? '%230f0d0b' : '%23ffffff';
-    const f = document.getElementById('calIframe');
-    if (f) f.src = f.src.replace(/bgcolor=%23[a-f0-9]{6}/i, 'bgcolor=' + bg);
-  } catch(e) {}
+  try{
+    const bg=next==='dark'?'%230f0d0b':'%23ffffff';
+    const f=document.getElementById('calIframe');
+    if(f) f.src=f.src.replace(/bgcolor=%23[a-f0-9]{6}/i,'bgcolor='+bg);
+  }catch(e){}
 }
 document.getElementById('loginThemeBtn').addEventListener('click', toggleTheme);
 
-/* ===================== AUTH ===================== */
-let currentUser = null;
+/* ── STATE ── */
+let currentUser=null, tasks=[], notes=[], reminders=[];
+let taskFilter='all', modalType=null, activeAlertId=null;
+let unsubTasks=null, unsubReminders=null, unsubNotes=null;
 
-// Persist session
-const savedUser = sessionStorage.getItem('ae_session');
-if (savedUser && ACCOUNTS[savedUser]) {
-  currentUser = savedUser;
-  showApp();
+/* ── FIRESTORE REFS ── */
+function col(sub)       { return collection(db,'users',currentUser,sub); }
+function dref(sub,id)   { return doc(db,'users',currentUser,sub,String(id)); }
+
+/* ── SYNC UI ── */
+function setSyncing(state){
+  const pill=document.getElementById('syncPill');
+  const txt=document.getElementById('syncText');
+  if(!pill) return;
+  pill.className='sync-pill'+(state!=='synced'?' '+state:'');
+  txt.textContent=state==='syncing'?'Saving…':state==='error'?'Error':'Synced';
 }
 
-function doLogin() {
-  const u = document.getElementById('loginUser').value.trim().toLowerCase();
-  const p = document.getElementById('loginPass').value;
-  const err = document.getElementById('loginError');
-  if (!ACCOUNTS[u] || ACCOUNTS[u].pass !== p) {
-    err.textContent = 'Invalid username or password.';
-    document.getElementById('loginPass').value = '';
-    return;
+/* ── AUTH ── */
+window.doLogin=function(){
+  const u=document.getElementById('loginUser').value.trim().toLowerCase();
+  const p=document.getElementById('loginPass').value;
+  const err=document.getElementById('loginError');
+  if(!ACCOUNTS[u]||ACCOUNTS[u].pass!==p){
+    err.textContent='Invalid username or password.';
+    document.getElementById('loginPass').value=''; return;
   }
-  err.textContent = '';
-  currentUser = u;
-  sessionStorage.setItem('ae_session', u);
+  err.textContent=''; currentUser=u;
+  sessionStorage.setItem('ae_session',u);
   showApp();
+};
+
+window.doLogout=function(){
+  [unsubTasks,unsubReminders,unsubNotes].forEach(u=>u&&u());
+  unsubTasks=unsubReminders=unsubNotes=null;
+  currentUser=null; sessionStorage.removeItem('ae_session');
+  tasks=[]; notes=[]; reminders=[];
+  document.getElementById('appShell').style.display='none';
+  document.getElementById('loginScreen').style.display='';
+  document.getElementById('loginUser').value='';
+  document.getElementById('loginPass').value='';
+};
+
+function showApp(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('appShell').style.display='';
+  document.getElementById('headerName').textContent=ACCOUNTS[currentUser].name;
+  document.getElementById('themeToggle').onclick=toggleTheme;
+  subscribeAll(); tickClock();
+  if(Notification.permission==='default') document.getElementById('notifBanner').classList.add('show');
 }
 
-function doLogout() {
-  currentUser = null;
-  sessionStorage.removeItem('ae_session');
-  tasks = []; notes = []; reminders = [];
-  document.getElementById('appShell').style.display = 'none';
-  document.getElementById('loginScreen').classList.remove('hidden');
-  document.getElementById('loginScreen').style.display = '';
-  document.getElementById('loginUser').value = '';
-  document.getElementById('loginPass').value = '';
+// auto-resume session
+const saved=sessionStorage.getItem('ae_session');
+if(saved&&ACCOUNTS[saved]){currentUser=saved; showApp();}
+
+/* ── REAL-TIME SUBSCRIPTIONS ── */
+function subscribeAll(){
+  unsubTasks=onSnapshot(query(col('tasks'),orderBy('createdAt','desc')),snap=>{
+    tasks=snap.docs.map(d=>({_id:d.id,...d.data()}));
+    renderTasks(); updateStats(); updateBell(); checkAlarms();
+  },e=>{console.error(e);setSyncing('error');});
+
+  unsubReminders=onSnapshot(query(col('reminders'),orderBy('createdAt','desc')),snap=>{
+    reminders=snap.docs.map(d=>({_id:d.id,...d.data()}));
+    renderReminders(); updateStats(); updateBell(); checkAlarms();
+  },e=>{console.error(e);setSyncing('error');});
+
+  unsubNotes=onSnapshot(query(col('notes'),orderBy('createdAt','desc')),snap=>{
+    notes=snap.docs.map(d=>({_id:d.id,...d.data()}));
+    renderNotes(); updateStats();
+  },e=>{console.error(e);setSyncing('error');});
 }
 
-function showApp() {
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('appShell').style.display = '';
-  document.getElementById('headerName').textContent = ACCOUNTS[currentUser].name;
-  // Wire theme toggle inside app
-  document.getElementById('themeToggle').onclick = toggleTheme;
-  // Load user data
-  loadUserData();
-  renderAll();
-  updateStats();
-  updateBell();
-  checkAlarms();
-  tickClock();
-  if (Notification.permission === 'default') {
-    document.getElementById('notifBanner').classList.add('show');
-  }
-}
-
-/* ===================== USER-SCOPED STORAGE ===================== */
-function ukey(k) { return 'ae_' + currentUser + '_' + k; }
-function loadUserData() {
-  tasks     = JSON.parse(localStorage.getItem(ukey('tasks'))     || '[]');
-  notes     = JSON.parse(localStorage.getItem(ukey('notes'))     || '[]');
-  reminders = JSON.parse(localStorage.getItem(ukey('reminders')) || '[]');
-}
-function saveTasks()     { localStorage.setItem(ukey('tasks'),     JSON.stringify(tasks)); }
-function saveReminders() { localStorage.setItem(ukey('reminders'), JSON.stringify(reminders)); }
-function saveNotes()     { localStorage.setItem(ukey('notes'),     JSON.stringify(notes)); }
-function saveAll()       { saveTasks(); saveReminders(); saveNotes(); }
-
-/* ===================== STATE ===================== */
-let tasks = [], notes = [], reminders = [];
-let taskFilter = 'all';
-let modalType  = null;
-let activeAlertId = null;
-
-/* ===================== NOTIFICATIONS ===================== */
-function requestNotifPermission() {
-  Notification.requestPermission().then(p => {
-    if (p === 'granted') { document.getElementById('notifBanner').classList.remove('show'); showToast('Browser notifications ON 🔔'); }
+/* ── NOTIFICATIONS ── */
+window.requestNotifPermission=function(){
+  Notification.requestPermission().then(p=>{
+    if(p==='granted'){document.getElementById('notifBanner').classList.remove('show');showToast('Browser notifications ON 🔔');}
     else showToast('Notifications denied — in-app alerts still work ✓');
   });
-}
-function browserNotif(title, body) {
-  if (Notification.permission === 'granted') new Notification(title, { body });
+};
+function browserNotif(title,body){
+  if(Notification.permission==='granted') new Notification(title,{body});
 }
 
-/* ===================== CLOCK ===================== */
+/* ── CLOCK ── */
 const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
-function tickClock() {
-  const n = new Date();
-  document.getElementById('cH').textContent = pad(n.getHours());
-  document.getElementById('cM').textContent = pad(n.getMinutes());
-  document.getElementById('cS').textContent = ':' + pad(n.getSeconds());
-  document.getElementById('cDate').textContent = DAYS[n.getDay()] + ', ' + MONTHS[n.getMonth()] + ' ' + n.getDate();
-  document.getElementById('cYear').textContent = n.getFullYear();
-  const h = n.getHours();
-  document.getElementById('timeOfDay').textContent = h<12?'morning':h<17?'afternoon':'evening';
+function tickClock(){
+  const n=new Date();
+  document.getElementById('cH').textContent=pad(n.getHours());
+  document.getElementById('cM').textContent=pad(n.getMinutes());
+  document.getElementById('cS').textContent=':'+pad(n.getSeconds());
+  document.getElementById('cDate').textContent=DAYS[n.getDay()]+', '+MONTHS[n.getMonth()]+' '+n.getDate();
+  document.getElementById('cYear').textContent=n.getFullYear();
+  const h=n.getHours();
+  document.getElementById('timeOfDay').textContent=h<12?'morning':h<17?'afternoon':'evening';
 }
-setInterval(tickClock, 1000);
+setInterval(tickClock,1000);
 
-/* ===================== ALARM ENGINE ===================== */
-setInterval(checkAlarms, 15000);
-function checkAlarms() {
-  if (!currentUser) return;
-  const now = Date.now(); let changed = false;
-  reminders.forEach(r => {
-    if (r.fired) return;
-    if (r.datetime <= now) { r.fired = true; changed = true; fireAlert(r.id, r.type, r.title, r.notes, r.datetime); }
+/* ── ALARM ENGINE ── */
+setInterval(checkAlarms,15000);
+function checkAlarms(){
+  if(!currentUser) return;
+  const now=Date.now();
+  reminders.forEach(r=>{
+    if(r.fired) return;
+    if(r.datetime<=now){
+      setDoc(dref('reminders',r._id),{fired:true},{merge:true});
+      fireAlert(r._id,r.type,r.title,r.notes||'',r.datetime);
+    }
   });
-  tasks.forEach(t => {
-    if (!t.remindAt || t.remindFired) return;
-    if (new Date(t.remindAt).getTime() <= now) { t.remindFired = true; changed = true; fireAlert('task_'+t.id, 'task', t.text, '', new Date(t.remindAt).getTime()); }
+  tasks.forEach(t=>{
+    if(!t.remindAt||t.remindFired) return;
+    if(new Date(t.remindAt).getTime()<=now){
+      setDoc(dref('tasks',t._id),{remindFired:true},{merge:true});
+      fireAlert('task_'+t._id,'task',t.text,'',new Date(t.remindAt).getTime());
+    }
   });
-  if (changed) { saveAll(); renderAll(); }
-  updateBell();
 }
-function fireAlert(id, type, title, notesText, dt) {
-  const icons = {call:'📞',meeting:'📅',reminder:'⏰',deadline:'🚨',task:'✅'};
-  const icon  = icons[type] || '🔔';
-  document.getElementById('aIcon').textContent = icon;
-  document.getElementById('aTitle').textContent = icon + ' ' + title;
-  document.getElementById('aBody').textContent  = (notesText ? notesText + '\n' : '') + 'Time: ' + fmtTs(dt);
+function fireAlert(id,type,title,notesText,dt){
+  const icons={call:'📞',meeting:'📅',reminder:'⏰',deadline:'🚨',task:'✅'};
+  const icon=icons[type]||'🔔';
+  document.getElementById('aIcon').textContent=icon;
+  document.getElementById('aTitle').textContent=icon+' '+title;
+  document.getElementById('aBody').textContent=(notesText?notesText+'\n':'')+'Time: '+fmtTs(dt);
   document.getElementById('alertPopup').classList.add('show');
-  activeAlertId = id;
-  browserNotif(icon + ' ' + title, notesText || ('Time: ' + fmtTs(dt)));
+  activeAlertId=id;
+  browserNotif(icon+' '+title,notesText||('Time: '+fmtTs(dt)));
   playBeep();
 }
-function dismissAlert() { document.getElementById('alertPopup').classList.remove('show'); activeAlertId = null; }
-function snoozeAlert() {
-  if (activeAlertId == null) return;
-  const r = reminders.find(x => x.id === activeAlertId);
-  if (r) { r.fired = false; r.datetime = Date.now() + 5*60*1000; saveReminders(); renderReminders(); }
+window.dismissAlert=function(){document.getElementById('alertPopup').classList.remove('show');activeAlertId=null;};
+window.snoozeAlert=function(){
+  if(!activeAlertId) return;
+  const r=reminders.find(x=>x._id===activeAlertId);
+  if(r) setDoc(dref('reminders',r._id),{fired:false,datetime:Date.now()+5*60*1000},{merge:true});
   document.getElementById('alertPopup').classList.remove('show');
-  showToast('Snoozed 5 minutes 😴'); activeAlertId = null;
-}
-function playBeep() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    [0, 0.18, 0.36].forEach(o => {
-      const osc = ctx.createOscillator(), g = ctx.createGain();
-      osc.connect(g); g.connect(ctx.destination);
-      osc.frequency.value = 880; osc.type = 'sine';
-      g.gain.setValueAtTime(0.28, ctx.currentTime + o);
-      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + o + 0.28);
-      osc.start(ctx.currentTime + o); osc.stop(ctx.currentTime + o + 0.28);
+  showToast('Snoozed 5 minutes 😴'); activeAlertId=null;
+};
+function playBeep(){
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    [0,0.18,0.36].forEach(o=>{
+      const osc=ctx.createOscillator(),g=ctx.createGain();
+      osc.connect(g);g.connect(ctx.destination);
+      osc.frequency.value=880;osc.type='sine';
+      g.gain.setValueAtTime(0.28,ctx.currentTime+o);
+      g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+o+0.28);
+      osc.start(ctx.currentTime+o);osc.stop(ctx.currentTime+o+0.28);
     });
-  } catch(e){}
+  }catch(e){}
 }
-function updateBell() {
-  if (!currentUser) return;
-  const now = Date.now();
-  const n = reminders.filter(r => !r.fired && r.datetime > now).length
-          + tasks.filter(t => t.remindAt && !t.remindFired && new Date(t.remindAt).getTime() > now).length;
-  const b = document.getElementById('bellBadge');
-  b.textContent = n; b.classList.toggle('visible', n > 0);
+function updateBell(){
+  if(!currentUser) return;
+  const now=Date.now();
+  const n=reminders.filter(r=>!r.fired&&r.datetime>now).length
+         +tasks.filter(t=>t.remindAt&&!t.remindFired&&new Date(t.remindAt).getTime()>now).length;
+  const b=document.getElementById('bellBadge');
+  b.textContent=n; b.classList.toggle('visible',n>0);
 }
 
-/* ===================== TASKS ===================== */
-function addTask(txtArg, priArg, catArg, remArg) {
-  const txt = txtArg !== undefined ? txtArg : document.getElementById('taskInput').value.trim();
-  if (!txt) return;
-  const pri = priArg || document.getElementById('taskPriority').value;
-  const cat = catArg || document.getElementById('taskCategory').value;
-  const rem = remArg !== undefined ? remArg : document.getElementById('taskRemindAt').value;
-  tasks.unshift({ id: Date.now(), text: txt, priority: pri, category: cat, done: false, remindAt: rem || null, remindFired: false });
-  if (!txtArg) { document.getElementById('taskInput').value = ''; document.getElementById('taskRemindAt').value = ''; }
-  saveTasks(); renderAll(); updateStats();
-  showToast(rem ? 'Task added ✅  Alarm: ' + fmtLocal(rem) : 'Task added ✅');
-}
-function toggleTask(id) { tasks = tasks.map(t => t.id===id ? {...t, done:!t.done} : t); saveTasks(); renderAll(); updateStats(); }
-function deleteTask(id) { tasks = tasks.filter(t => t.id!==id); saveTasks(); renderAll(); updateStats(); showToast('Removed 🗑️'); }
-function clearCompleted() {
-  const n = tasks.filter(t=>t.done).length; tasks = tasks.filter(t=>!t.done);
-  saveTasks(); renderAll(); updateStats();
-  showToast(n ? 'Cleared '+n+' task(s) 🧹' : 'Nothing to clear');
-}
-function setFilter(f, btn) {
-  taskFilter = f;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+/* ── TASKS ── */
+window.addTask=async function(txtArg,priArg,catArg,remArg){
+  const txt=txtArg!==undefined?txtArg:document.getElementById('taskInput').value.trim();
+  if(!txt) return;
+  const pri=priArg||document.getElementById('taskPriority').value;
+  const cat=catArg||document.getElementById('taskCategory').value;
+  const rem=remArg!==undefined?remArg:document.getElementById('taskRemindAt').value;
+  setSyncing('syncing');
+  try{
+    await addDoc(col('tasks'),{
+      text:txt,priority:pri,category:cat,
+      done:false,remindAt:rem||null,remindFired:false,
+      createdAt:serverTimestamp()
+    });
+    if(!txtArg){document.getElementById('taskInput').value='';document.getElementById('taskRemindAt').value='';}
+    setSyncing('synced');
+    showToast(rem?'Task added ✅  Alarm: '+fmtLocal(rem):'Task added ✅');
+  }catch(e){setSyncing('error');showToast('⚠️ '+e.message);}
+};
+
+window.toggleTask=async function(id){
+  const t=tasks.find(x=>x._id===id); if(!t) return;
+  setSyncing('syncing');
+  try{await setDoc(dref('tasks',id),{done:!t.done},{merge:true});setSyncing('synced');}
+  catch(e){setSyncing('error');}
+};
+
+window.deleteTask=async function(id){
+  setSyncing('syncing');
+  try{await deleteDoc(dref('tasks',id));setSyncing('synced');showToast('Removed 🗑️');}
+  catch(e){setSyncing('error');}
+};
+
+window.clearCompleted=async function(){
+  const done=tasks.filter(t=>t.done);
+  if(!done.length){showToast('Nothing to clear');return;}
+  setSyncing('syncing');
+  try{
+    await Promise.all(done.map(t=>deleteDoc(dref('tasks',t._id))));
+    setSyncing('synced');showToast('Cleared '+done.length+' task(s) 🧹');
+  }catch(e){setSyncing('error');}
+};
+
+window.setFilter=function(f,btn){
+  taskFilter=f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active'); renderTasks();
-}
-function filteredTasks() {
-  switch(taskFilter) {
+};
+
+function filteredTasks(){
+  switch(taskFilter){
     case 'pending': return tasks.filter(t=>!t.done);
     case 'done':    return tasks.filter(t=>t.done);
     case 'high':    return tasks.filter(t=>t.priority==='high');
     case 'work':    return tasks.filter(t=>t.category==='Work');
-    case 'alarm':   return tasks.filter(t=>t.remindAt && !t.remindFired);
+    case 'alarm':   return tasks.filter(t=>t.remindAt&&!t.remindFired);
     default:        return tasks;
   }
 }
-function renderTasks() {
-  const ul = document.getElementById('taskList'); ul.innerHTML = '';
-  const list = filteredTasks();
-  if (!list.length) { ul.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>No tasks here!</p></div>'; return; }
-  const now = Date.now();
-  list.forEach(t => {
-    const li = document.createElement('li');
-    const soon = t.remindAt && !t.remindFired && (new Date(t.remindAt).getTime()-now) < 15*60*1000 && new Date(t.remindAt).getTime() > now;
-    li.className = 'task-item' + (t.done?' done':'') + (soon?' alarm-soon':'');
-    const chip = t.remindAt ? (t.remindFired
-      ? '<span class="alarm-chip fired">✓ Alerted</span>'
-      : '<span class="alarm-chip">⏰ '+fmtLocal(t.remindAt)+'</span>') : '';
-    li.innerHTML = `
-      <button class="task-check" onclick="toggleTask(${t.id})"><span class="chk-icon">✓</span></button>
-      <span class="task-text">${esc(t.text)}</span>
-      ${chip}
+
+function renderTasks(){
+  const ul=document.getElementById('taskList'); ul.innerHTML='';
+  const list=filteredTasks();
+  if(!list.length){ul.innerHTML='<div class="empty-state"><div class="empty-icon">📭</div><p>No tasks here!</p></div>';return;}
+  const now=Date.now();
+  list.forEach(t=>{
+    const li=document.createElement('li');
+    const soon=t.remindAt&&!t.remindFired&&(new Date(t.remindAt).getTime()-now)<15*60*1000&&new Date(t.remindAt).getTime()>now;
+    li.className='task-item'+(t.done?' done':'')+(soon?' alarm-soon':'');
+    const chip=t.remindAt?(t.remindFired?'<span class="alarm-chip fired">✓ Alerted</span>':'<span class="alarm-chip">⏰ '+fmtLocal(t.remindAt)+'</span>'):'';
+    li.innerHTML=`
+      <button class="task-check" onclick="toggleTask('${t._id}')"><span class="chk-icon">✓</span></button>
+      <span class="task-text">${esc(t.text)}</span>${chip}
       <span class="task-priority p-${t.priority}">${t.priority}</span>
       <span class="task-cat">${esc(t.category)}</span>
-      <button class="task-del" onclick="deleteTask(${t.id})">✕</button>`;
+      <button class="task-del" onclick="deleteTask('${t._id}')">✕</button>`;
     ul.appendChild(li);
   });
 }
 
-/* ===================== REMINDERS ===================== */
-function addReminder(type, title, dt, notesText) {
-  reminders.unshift({ id: Date.now(), type, title, datetime: dt, notes: notesText||'', fired: false });
-  saveReminders(); renderReminders(); updateStats(); updateBell();
+/* ── REMINDERS ── */
+async function addReminder(type,title,dt,notesText){
+  setSyncing('syncing');
+  try{
+    await addDoc(col('reminders'),{type,title,datetime:dt,notes:notesText||'',fired:false,createdAt:serverTimestamp()});
+    setSyncing('synced');
+  }catch(e){setSyncing('error');showToast('⚠️ '+e.message);}
 }
-function deleteReminder(id) { reminders = reminders.filter(r=>r.id!==id); saveReminders(); renderReminders(); updateStats(); updateBell(); }
-function renderReminders() {
-  const ul = document.getElementById('reminderList'); ul.innerHTML = '';
-  if (!reminders.length) {
-    ul.innerHTML = '<div class="empty-state"><div class="empty-icon">🔕</div><p>No reminders — use Quick Actions above!</p></div>'; return;
-  }
-  const now = Date.now();
-  const sorted = [...reminders].sort((a,b) => a.fired!==b.fired ? (a.fired?1:-1) : a.datetime-b.datetime);
-  const icons = {call:'📞',meeting:'📅',reminder:'⏰',deadline:'🚨'};
-  sorted.forEach(r => {
-    const li = document.createElement('li');
-    const diff = r.datetime - now;
-    const soon = !r.fired && diff>0 && diff<15*60*1000;
-    li.className = 'rem-item' + (r.fired?' r-fired':'') + (soon?' r-soon':'');
-    const cd = r.fired ? '✓ Done' : countdown(r.datetime);
-    const cdCls = r.fired?'fired':soon?'soon':'';
-    li.innerHTML = `
+
+window.deleteReminder=async function(id){
+  setSyncing('syncing');
+  try{await deleteDoc(dref('reminders',id));setSyncing('synced');showToast('Reminder removed 🗑️');}
+  catch(e){setSyncing('error');}
+};
+
+function renderReminders(){
+  const ul=document.getElementById('reminderList'); ul.innerHTML='';
+  if(!reminders.length){ul.innerHTML='<div class="empty-state"><div class="empty-icon">🔕</div><p>No reminders — use Quick Actions above!</p></div>';return;}
+  const now=Date.now();
+  const sorted=[...reminders].sort((a,b)=>a.fired!==b.fired?(a.fired?1:-1):a.datetime-b.datetime);
+  const icons={call:'📞',meeting:'📅',reminder:'⏰',deadline:'🚨'};
+  sorted.forEach(r=>{
+    const li=document.createElement('li');
+    const diff=r.datetime-now, soon=!r.fired&&diff>0&&diff<15*60*1000;
+    li.className='rem-item'+(r.fired?' r-fired':'')+(soon?' r-soon':'');
+    const cd=r.fired?'✓ Done':countdown(r.datetime);
+    const cdCls=r.fired?'fired':soon?'soon':'';
+    li.innerHTML=`
       <div class="rem-header">
         <span class="rem-badge t-${r.type}">${icons[r.type]||'🔔'} ${r.type}</span>
         <span class="rem-title">${esc(r.title)}</span>
-        <button class="rem-del" onclick="deleteReminder(${r.id})">✕</button>
+        <button class="rem-del" onclick="deleteReminder('${r._id}')">✕</button>
       </div>
       <div class="rem-time-row">📅 ${fmtTs(r.datetime)} · <span class="rem-cd ${cdCls}">${cd}</span></div>
       ${r.notes?`<div class="rem-notes">${esc(r.notes)}</div>`:''}`;
@@ -711,26 +662,35 @@ function renderReminders() {
   });
 }
 
-/* ===================== NOTES ===================== */
-function addNote(txt) {
-  txt = txt || document.getElementById('noteInput').value.trim();
-  if (!txt) return;
-  notes.unshift({ id:Date.now(), text:txt, time:new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) });
-  saveNotes(); document.getElementById('noteInput').value=''; renderNotes(); updateStats(); showToast('Note saved 📝');
-}
-function deleteNote(id) { notes=notes.filter(n=>n.id!==id); saveNotes(); renderNotes(); updateStats(); }
-function renderNotes() {
-  const g = document.getElementById('notesList'); g.innerHTML='';
-  if (!notes.length) { g.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🗒️</div><p>No notes yet</p></div>'; return; }
-  notes.forEach(n => {
-    const d = document.createElement('div'); d.className='note-item';
-    d.innerHTML=`<div class="note-dot"></div><span class="note-text">${esc(n.text)}</span><span class="note-time">${n.time}</span><button class="note-del" onclick="deleteNote(${n.id})">✕</button>`;
+/* ── NOTES ── */
+window.addNote=async function(txt){
+  txt=txt||document.getElementById('noteInput').value.trim(); if(!txt) return;
+  setSyncing('syncing');
+  try{
+    await addDoc(col('notes'),{text:txt,time:new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),createdAt:serverTimestamp()});
+    document.getElementById('noteInput').value='';
+    setSyncing('synced'); showToast('Note saved 📝');
+  }catch(e){setSyncing('error');showToast('⚠️ '+e.message);}
+};
+
+window.deleteNote=async function(id){
+  setSyncing('syncing');
+  try{await deleteDoc(dref('notes',id));setSyncing('synced');}
+  catch(e){setSyncing('error');}
+};
+
+function renderNotes(){
+  const g=document.getElementById('notesList'); g.innerHTML='';
+  if(!notes.length){g.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🗒️</div><p>No notes yet</p></div>';return;}
+  notes.forEach(n=>{
+    const d=document.createElement('div'); d.className='note-item';
+    d.innerHTML=`<div class="note-dot"></div><span class="note-text">${esc(n.text)}</span><span class="note-time">${n.time}</span><button class="note-del" onclick="deleteNote('${n._id}')">✕</button>`;
     g.appendChild(d);
   });
 }
 
-/* ===================== STATS ===================== */
-function updateStats() {
+/* ── STATS ── */
+function updateStats(){
   const done=tasks.filter(t=>t.done).length, pend=tasks.length-done;
   const now=Date.now();
   const active=reminders.filter(r=>!r.fired).length+tasks.filter(t=>t.remindAt&&!t.remindFired&&new Date(t.remindAt).getTime()>now).length;
@@ -742,73 +702,73 @@ function updateStats() {
   document.getElementById('pendingBadge').textContent=pend+' pending';
 }
 
-/* ===================== MODAL ===================== */
-const MODALS = {
-  call:{title:'📞 Schedule a Call',fields:[{id:'mf0',label:'Contact Name',type:'text',ph:'e.g. Sarah Johnson',req:true},{id:'mf1',label:'Date',type:'date',req:true},{id:'mf2',label:'Time',type:'time',req:true},{id:'mf3',label:'Notes / Topics',type:'textarea',ph:'What to discuss…'}]},
-  meeting:{title:'📅 Schedule a Meeting',fields:[{id:'mf0',label:'Meeting Title',type:'text',ph:'e.g. Q2 Review',req:true},{id:'mf1',label:'Date',type:'date',req:true},{id:'mf2',label:'Time',type:'time',req:true},{id:'mf3',label:'Agenda / Notes',type:'textarea',ph:'Meeting agenda…'}]},
-  reminder:{title:'⏰ Set a Reminder',fields:[{id:'mf0',label:'Remind me about',type:'text',ph:'e.g. Take medicine',req:true},{id:'mf1',label:'Date',type:'date',req:true},{id:'mf2',label:'Time',type:'time',req:true},{id:'mf3',label:'Extra notes',type:'textarea',ph:'Optional…'}]},
-  deadline:{title:'🚨 Set a Deadline',fields:[{id:'mf0',label:'Task / Project',type:'text',ph:'e.g. Submit report',req:true},{id:'mf1',label:'Deadline Date',type:'date',req:true},{id:'mf2',label:'Time (optional)',type:'time'},{id:'mf3',label:'Details',type:'textarea',ph:'Optional notes…'}]}
+/* ── MODAL ── */
+const MODALS={
+  call:    {title:'📞 Schedule a Call',    fields:[{id:'mf0',label:'Contact Name',   type:'text',ph:'e.g. Sarah Johnson',req:true},{id:'mf1',label:'Date',type:'date',req:true},{id:'mf2',label:'Time',type:'time',req:true},{id:'mf3',label:'Notes / Topics',type:'textarea',ph:'What to discuss…'}]},
+  meeting: {title:'📅 Schedule a Meeting', fields:[{id:'mf0',label:'Meeting Title',   type:'text',ph:'e.g. Q2 Review',req:true},   {id:'mf1',label:'Date',type:'date',req:true},{id:'mf2',label:'Time',type:'time',req:true},{id:'mf3',label:'Agenda / Notes',type:'textarea',ph:'Meeting agenda…'}]},
+  reminder:{title:'⏰ Set a Reminder',     fields:[{id:'mf0',label:'Remind me about', type:'text',ph:'e.g. Take medicine',req:true},{id:'mf1',label:'Date',type:'date',req:true},{id:'mf2',label:'Time',type:'time',req:true},{id:'mf3',label:'Extra notes',type:'textarea',ph:'Optional…'}]},
+  deadline:{title:'🚨 Set a Deadline',     fields:[{id:'mf0',label:'Task / Project',  type:'text',ph:'e.g. Submit report',req:true},{id:'mf1',label:'Deadline Date',type:'date',req:true},{id:'mf2',label:'Time (optional)',type:'time'},{id:'mf3',label:'Details',type:'textarea',ph:'Optional notes…'}]}
 };
-function openModal(type) {
-  modalType = type;
-  const cfg = MODALS[type];
-  document.getElementById('mTitle').textContent = cfg.title;
-  const now = new Date();
-  const today = now.toISOString().split('T')[0];
-  const nowTime = pad(now.getHours())+':'+pad(now.getMinutes());
-  document.getElementById('mFields').innerHTML = cfg.fields.map(f => {
-    if (f.type==='textarea') return `<div><label class="field-label">${f.label}</label><textarea class="textarea-field" id="${f.id}" rows="2" placeholder="${f.ph||''}"></textarea></div>`;
-    const def = f.type==='date' ? `value="${today}"` : f.type==='time' ? `value="${nowTime}"` : '';
+
+window.openModal=function(type){
+  modalType=type; const cfg=MODALS[type];
+  const now=new Date(), today=now.toISOString().split('T')[0];
+  const nowT=pad(now.getHours())+':'+pad(now.getMinutes());
+  document.getElementById('mTitle').textContent=cfg.title;
+  document.getElementById('mFields').innerHTML=cfg.fields.map(f=>{
+    if(f.type==='textarea') return `<div><label class="field-label">${f.label}</label><textarea class="textarea-field" id="${f.id}" rows="2" placeholder="${f.ph||''}"></textarea></div>`;
+    const def=f.type==='date'?`value="${today}"`:f.type==='time'?`value="${nowT}"`:'';
     return `<div class="field-group"><label class="field-label">${f.label}${f.req?'<span style="color:var(--danger)"> *</span>':''}</label><input type="${f.type}" class="input-field" id="${f.id}" placeholder="${f.ph||''}" ${def} /></div>`;
   }).join('');
   document.getElementById('modalOverlay').classList.add('open');
-  setTimeout(() => document.querySelector('#mFields input,#mFields textarea')?.focus(), 120);
-}
-function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); modalType=null; }
-function closeOutside(e) { if(e.target===document.getElementById('modalOverlay')) closeModal(); }
-function saveModal() {
-  if (!modalType) return;
-  const title = document.getElementById('mf0')?.value.trim();
-  const date  = document.getElementById('mf1')?.value;
-  const time  = document.getElementById('mf2')?.value;
-  const notesVal = document.getElementById('mf3')?.value.trim() || '';
-  if (!title) { showToast('⚠️ Please enter a title'); return; }
-  if (!date)  { showToast('⚠️ Please select a date'); return; }
-  const timeStr = time || '09:00';
-  const dtStr   = date + 'T' + timeStr + ':00';
-  const dt      = new Date(dtStr).getTime();
-  if (dt < Date.now()) showToast('⚠️ Date is in the past — alarm may fire immediately');
-  addReminder(modalType, title, dt, notesVal);
-  const labels = {call:'📞 Call',meeting:'📅 Meeting',reminder:'⏰',deadline:'🚨 Deadline'};
-  const taskTxt = `[${labels[modalType]}] ${title} @ ${fmtTime(timeStr)}`;
-  addTask(taskTxt, 'high', 'Work', dtStr);
-  closeModal();
-}
+  setTimeout(()=>document.querySelector('#mFields input,#mFields textarea')?.focus(),120);
+};
 
-/* ===================== HELPERS ===================== */
-function renderAll() { renderTasks(); renderReminders(); renderNotes(); }
-function scrollToReminders() { document.getElementById('remindersSection').scrollIntoView({behavior:'smooth'}); }
-function esc(s) { return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function pad(n) { return String(n).padStart(2,'0'); }
-function fmtTs(ts)    { return new Date(ts).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}); }
-function fmtLocal(s)  { try { return new Date(s).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}); } catch{ return s; } }
-function fmtTime(t)   { const[h,m]=t.split(':').map(Number); return `${h%12||12}:${pad(m)} ${h>=12?'PM':'AM'}`; }
-function countdown(ts) {
-  const d = ts - Date.now(); if (d<=0) return '🔴 Now!';
-  const m=Math.floor(d/60000), h=Math.floor(m/60), dy=Math.floor(h/24);
-  if(dy>0) return `in ${dy}d ${h%24}h`; if(h>0) return `in ${h}h ${m%60}m`; return `in ${m}m`;
-}
+window.closeModal=function(){document.getElementById('modalOverlay').classList.remove('open');modalType=null;};
+window.closeOutside=function(e){if(e.target===document.getElementById('modalOverlay'))closeModal();};
 
-/* ===================== TOAST ===================== */
-function showToast(msg, dur=3000) {
+window.saveModal=async function(){
+  if(!modalType) return;
+  const title=document.getElementById('mf0')?.value.trim();
+  const date=document.getElementById('mf1')?.value;
+  const time=document.getElementById('mf2')?.value;
+  const notesVal=document.getElementById('mf3')?.value.trim()||'';
+  if(!title){showToast('⚠️ Please enter a title');return;}
+  if(!date) {showToast('⚠️ Please select a date');return;}
+  const timeStr=time||'09:00';
+  const dtStr=date+'T'+timeStr+':00';
+  const dt=new Date(dtStr).getTime();
+  if(dt<Date.now()) showToast('⚠️ Date is in the past — alarm may fire immediately');
+  await addReminder(modalType,title,dt,notesVal);
+  const labels={call:'📞 Call',meeting:'📅 Meeting',reminder:'⏰',deadline:'🚨 Deadline'};
+  await addTask('['+labels[modalType]+'] '+title+' @ '+fmtTime(timeStr),'high','Work',dtStr);
+  closeModal(); showToast('✅ Saved to Firebase!');
+};
+
+/* ── HELPERS ── */
+window.scrollToReminders=function(){document.getElementById('remindersSection').scrollIntoView({behavior:'smooth'});};
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function pad(n){return String(n).padStart(2,'0');}
+function fmtTs(ts){return new Date(ts).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}
+function fmtLocal(s){try{return new Date(s).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}catch{return s;}}
+function fmtTime(t){const[h,m]=t.split(':').map(Number);return `${h%12||12}:${pad(m)} ${h>=12?'PM':'AM'}`;}
+function countdown(ts){
+  const d=ts-Date.now(); if(d<=0) return '🔴 Now!';
+  const m=Math.floor(d/60000),h=Math.floor(m/60),dy=Math.floor(h/24);
+  if(dy>0) return `in ${dy}d ${h%24}h`;
+  if(h>0)  return `in ${h}h ${m%60}m`;
+  return `in ${m}m`;
+}
+function showToast(msg,dur=3000){
   const c=document.getElementById('toastContainer');
   const t=document.createElement('div'); t.className='toast'; t.textContent=msg;
   c.appendChild(t);
   requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('show')));
-  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),350); }, dur);
+  setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),350);},dur);
 }
+window.showToast=showToast;
 
-setInterval(()=>{ if(currentUser){renderReminders(); renderTasks();} }, 60000);
+setInterval(()=>{if(currentUser){renderReminders();renderTasks();updateBell();}},60000);
 </script>
 </body>
 </html>
