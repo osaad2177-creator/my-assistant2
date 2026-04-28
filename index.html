@@ -788,8 +788,7 @@
 <script type="module">
 
 /* ─────────────────────────────────────────────
-   FIREBASE CONFIG
-   ↓ Paste YOUR config object here ↓
+   FIREBASE IMPORTS  (SDK v10 — stable compat)
 ───────────────────────────────────────────── */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
 import {
@@ -803,18 +802,21 @@ import {
   getFirestore,
   collection, doc,
   addDoc, setDoc, deleteDoc, getDoc, updateDoc,
-  onSnapshot, query, orderBy, where,
+  onSnapshot, query, orderBy,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
 
-// ★ YOUR FIREBASE CONFIG — replace this with yours from Firebase Console ★
+/* ─────────────────────────────────────────────
+   FIREBASE CONFIG  ← updated to your new project
+───────────────────────────────────────────── */
 const firebaseConfig = {
-  apiKey:            "AIzaSyABWDNOHFYAjflnVbCiR5r8l45rxyPcBgI",
-  authDomain:        "assistant-1e054.firebaseapp.com",
-  projectId:         "assistant-1e054",
-  storageBucket:     "assistant-1e054.firebasestorage.app",
-  messagingSenderId: "516130884600",
-  appId:             "1:516130884600:web:ae60fa24ef4386935e240d"
+  apiKey:            "AIzaSyAPTobXz48F9W2QLtibaoWeO31Ew7aTW5s",
+  authDomain:        "assistant-1e054-6c80d.firebaseapp.com",
+  projectId:         "assistant-1e054-6c80d",
+  storageBucket:     "assistant-1e054-6c80d.firebasestorage.app",
+  messagingSenderId: "867737545845",
+  appId:             "1:867737545845:web:8238469be6a44887c45c3c",
+  measurementId:     "G-8DCGZMB5E9"
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -828,7 +830,6 @@ let currentUser  = null;
 let tasks        = [];
 let taskFilter   = 'all';
 let unsubTasks   = null;
-// Tracks whether the first Firestore snapshot has arrived
 let firstLoad    = { tasks: false };
 
 /* ─────────────────────────────────────────────
@@ -841,7 +842,6 @@ document.getElementById('themeTog').onclick = () => {
   const next = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
   htmlEl.setAttribute('data-theme', next);
   localStorage.setItem('ae_theme', next);
-  // Update calendar background too
   try {
     const bg  = next === 'dark' ? '%230f0d0b' : '%23ffffff';
     const frm = document.getElementById('calFrame');
@@ -887,20 +887,17 @@ function updateDateBanner() {
   const day  = now.getDate();
   const yr   = now.getFullYear();
 
-  // e.g. "Monday, April 28, 2026"  — day name in accent
   const fullEl = document.getElementById('dateFull');
   if (fullEl) fullEl.innerHTML = `<em>${wday}</em>, ${mon} ${day}, ${yr}`;
 
-  // Day-of-year & week
   const soy    = new Date(yr, 0, 1);
   const doy    = Math.ceil((now - soy) / 86400000);
   const wk     = Math.ceil(doy / 7);
   const metaEl = document.getElementById('dateMeta');
   if (metaEl) metaEl.textContent = `Day ${doy} of ${yr}  ·  Week ${wk}`;
 
-  // Day progress
   const sec = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-  const pct = Math.round(sec / 864);  // /86400 * 100
+  const pct = Math.round(sec / 864);
   const fill = document.getElementById('dayFill');
   const pctEl = document.getElementById('dayPct');
   if (fill)  fill.style.width = pct + '%';
@@ -911,25 +908,17 @@ setInterval(updateDateBanner, 60_000);
 
 /* ─────────────────────────────────────────────
    AUTH STATE OBSERVER
-   This is the single source of truth for
-   showing/hiding auth vs app screens.
-   onAuthStateChanged fires on:
-     - page load (even after refresh) ← fixes persistence
-     - sign in
-     - sign out
 ───────────────────────────────────────────── */
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    // ── User is signed in ──
     currentUser = user;
     setLoadMsg('Loading your data…');
     document.getElementById('authScreen').classList.remove('show');
     document.getElementById('app').classList.add('show');
     document.getElementById('hdrUser').textContent = user.email;
-    startListening();   // subscribe to Firestore
+    startListening();
     updateDateBanner();
   } else {
-    // ── No user / signed out ──
     currentUser = null;
     stopListening();
     hideLoad();
@@ -940,13 +929,10 @@ onAuthStateChanged(auth, (user) => {
 
 /* ─────────────────────────────────────────────
    FIRESTORE REAL-TIME LISTENER
-   onSnapshot keeps data in sync and
-   survives page refreshes automatically.
 ───────────────────────────────────────────── */
 function startListening() {
   if (!currentUser) return;
 
-  // Query: only this user's tasks, newest first
   const q = query(
     collection(db, 'users', currentUser.uid, 'tasks'),
     orderBy('createdAt', 'desc')
@@ -954,12 +940,9 @@ function startListening() {
 
   unsubTasks = onSnapshot(q,
     (snap) => {
-      // Map Firestore docs → plain objects
       tasks = snap.docs.map(d => ({ _id: d.id, ...d.data() }));
       renderTasks();
       updateStats();
-
-      // First snapshot received → hide loading screen
       if (!firstLoad.tasks) {
         firstLoad.tasks = true;
         hideLoad();
@@ -969,7 +952,6 @@ function startListening() {
     (err) => {
       console.error('Firestore error:', err);
       setSync('err');
-      // Still hide loading so user isn't stuck
       if (!firstLoad.tasks) { firstLoad.tasks = true; hideLoad(); }
     }
   );
@@ -1006,7 +988,6 @@ function setBtnLoading(id, on) {
     : (id === 'siBtn' ? 'Sign In →' : 'Create Account →');
 }
 
-/* Sign In */
 window.signIn = async function() {
   const email = document.getElementById('siEmail').value.trim();
   const pass  = document.getElementById('siPass').value;
@@ -1016,20 +997,12 @@ window.signIn = async function() {
   setBtnLoading('siBtn', true);
   try {
     await signInWithEmailAndPassword(auth, email, pass);
-    // onAuthStateChanged handles the rest
   } catch (e) {
     errEl.textContent = friendlyErr(e.code);
     setBtnLoading('siBtn', false);
   }
 };
 
-/* Sign Up — invite-only flow:
-   1. Validate activation code in Firestore "invites" collection
-   2. Code must exist AND used === false
-   3. Create Firebase Auth account
-   4. Mark code as used
-   5. Save user profile
-*/
 window.signUp = async function() {
   const email = document.getElementById('suEmail').value.trim();
   const pass  = document.getElementById('suPass').value;
@@ -1044,7 +1017,6 @@ window.signUp = async function() {
   setBtnLoading('suBtn', true);
 
   try {
-    // Step 1 — Check invite code (stored securely in Firestore, NOT in frontend)
     const invRef  = doc(db, 'invites', code);
     const invSnap = await getDoc(invRef);
 
@@ -1057,17 +1029,14 @@ window.signUp = async function() {
       setBtnLoading('suBtn', false); return;
     }
 
-    // Step 2 — Create Firebase Auth account
     const cred = await createUserWithEmailAndPassword(auth, email, pass);
 
-    // Step 3 — Mark code as used
     await updateDoc(invRef, {
       used:   true,
       usedBy: cred.user.uid,
       usedAt: serverTimestamp()
     });
 
-    // Step 4 — Save user profile in Firestore
     await setDoc(doc(db, 'users', cred.user.uid, 'profile', 'info'), {
       email,
       createdAt:  serverTimestamp(),
@@ -1075,7 +1044,6 @@ window.signUp = async function() {
     });
 
     okEl.textContent = '✅ Account created! Signing you in…';
-    // onAuthStateChanged fires and transitions to app
 
   } catch (e) {
     document.getElementById('suErr').textContent = friendlyErr(e.code);
@@ -1083,7 +1051,6 @@ window.signUp = async function() {
   }
 };
 
-/* Sign Out */
 window.doSignOut = async function() {
   stopListening();
   await signOut(auth);
@@ -1106,8 +1073,6 @@ function friendlyErr(code) {
 /* ─────────────────────────────────────────────
    TASK FUNCTIONS
 ───────────────────────────────────────────── */
-
-/* ADD — writes to Firestore, onSnapshot updates UI automatically */
 window.addTask = async function() {
   const txt = document.getElementById('taskTxt').value.trim();
   if (!txt) return;
@@ -1123,8 +1088,8 @@ window.addTask = async function() {
         priority:  pri,
         category:  cat,
         done:      false,
-        userId:    currentUser.uid,   // explicit userId stored with task
-        createdAt: serverTimestamp()  // server timestamp for reliable ordering
+        userId:    currentUser.uid,
+        createdAt: serverTimestamp()
       }
     );
     document.getElementById('taskTxt').value = '';
@@ -1136,7 +1101,6 @@ window.addTask = async function() {
   }
 };
 
-/* TOGGLE DONE */
 window.toggleTask = async function(id) {
   const t = tasks.find(x => x._id === id); if (!t) return;
   setSync('saving');
@@ -1150,7 +1114,6 @@ window.toggleTask = async function(id) {
   } catch (e) { setSync('err'); }
 };
 
-/* DELETE */
 window.deleteTask = async function(id) {
   setSync('saving');
   try {
@@ -1160,7 +1123,6 @@ window.deleteTask = async function(id) {
   } catch (e) { setSync('err'); }
 };
 
-/* CLEAR COMPLETED */
 window.clearDone = async function() {
   const doneTasks = tasks.filter(t => t.done);
   if (!doneTasks.length) { toast('No completed tasks to clear.'); return; }
@@ -1174,7 +1136,6 @@ window.clearDone = async function() {
   } catch (e) { setSync('err'); }
 };
 
-/* FILTER */
 window.setFilter = function(f, btn) {
   taskFilter = f;
   document.querySelectorAll('.f-pill').forEach(b => b.classList.remove('on'));
@@ -1192,7 +1153,6 @@ function getFilteredTasks() {
   }
 }
 
-/* RENDER — called every time onSnapshot fires (real-time) */
 function renderTasks() {
   const ul   = document.getElementById('taskList');
   const list = getFilteredTasks();
@@ -1223,7 +1183,6 @@ function renderTasks() {
   });
 }
 
-/* STATS */
 function updateStats() {
   const done    = tasks.filter(t => t.done).length;
   const pending = tasks.length - done;
