@@ -196,14 +196,6 @@
     .auth-err  { font-size: .76rem; color: var(--red);   min-height: 1rem; margin-top: .5rem; text-align: center; }
     .auth-ok   { font-size: .76rem; color: var(--green); min-height: 1rem; margin-top: .5rem; text-align: center; }
 
-    .invite-note {
-      display: flex; align-items: center; gap: .5rem;
-      background: var(--accent-2s); border: 1px solid var(--accent-2);
-      border-radius: var(--r-sm); padding: .6rem .9rem;
-      font-size: .76rem; color: var(--accent-2);
-      margin-bottom: 1.2rem;
-    }
-
     /* ═══════════════════════════════════════
        APP SHELL
     ═══════════════════════════════════════ */
@@ -584,7 +576,7 @@
 <div id="authScreen">
   <div class="auth-card">
     <div class="auth-logo">Æther<em>.</em></div>
-    <p class="auth-sub">Your invite-only personal assistant</p>
+    <p class="auth-sub">Your personal assistant</p>
 
     <div class="tab-row">
       <button class="tab-btn on" id="tabSI" onclick="switchTab('in')">Sign In</button>
@@ -609,22 +601,13 @@
 
     <!-- ── Sign Up ── -->
     <div class="auth-panel" id="panelUp">
-      <div class="invite-note">
-        🔐 Invite-only — you need an activation code to join.
-      </div>
       <div class="f-group">
         <label class="f-label">Email</label>
         <input class="f-input" id="suEmail" type="email" placeholder="you@example.com" />
       </div>
       <div class="f-group">
         <label class="f-label">Password <span style="font-weight:300;text-transform:none">(min 8 chars)</span></label>
-        <input class="f-input" id="suPass" type="password" placeholder="Create a strong password" />
-      </div>
-      <div class="f-group">
-        <label class="f-label">Activation Code</label>
-        <input class="f-input" id="suCode" type="text"
-               placeholder="e.g. XXXX-XXXX-XXXX"
-               style="letter-spacing:.07em;text-transform:uppercase"
+        <input class="f-input" id="suPass" type="password" placeholder="Create a strong password"
                onkeydown="if(event.key==='Enter')signUp()" />
       </div>
       <button class="auth-submit" id="suBtn" onclick="signUp()">Create Account →</button>
@@ -678,14 +661,6 @@
       </div>
       <div class="card-body">
         <div class="cal-frame-wrap">
-          <!--
-            CALENDAR SETUP:
-            1. Go to calendar.google.com
-            2. Click the gear → Settings
-            3. Find your calendar → "Integrate calendar"
-            4. Copy the "Embed code" src URL
-            5. Replace the src below with your URL
-          -->
           <iframe
             id="calFrame"
             src="https://calendar.google.com/calendar/embed?height=520&wkst=1&ctz=Africa%2FCairo&bgcolor=%23ffffff&showTitle=0&showNav=1&showPrint=0&showTabs=1&showCalendars=0&mode=WEEK"
@@ -807,7 +782,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
 
 /* ─────────────────────────────────────────────
-   FIREBASE CONFIG  ← updated to your new project
+   FIREBASE CONFIG
 ───────────────────────────────────────────── */
 const firebaseConfig = {
   apiKey:            "AIzaSyAPTobXz48F9W2QLtibaoWeO31Ew7aTW5s",
@@ -1006,41 +981,21 @@ window.signIn = async function() {
 window.signUp = async function() {
   const email = document.getElementById('suEmail').value.trim();
   const pass  = document.getElementById('suPass').value;
-  const code  = document.getElementById('suCode').value.trim().toUpperCase();
   const errEl = document.getElementById('suErr');
   const okEl  = document.getElementById('suOk');
   errEl.textContent = ''; okEl.textContent = '';
 
-  if (!email || !pass || !code) { errEl.textContent = 'All fields are required.'; return; }
-  if (pass.length < 8)          { errEl.textContent = 'Password must be at least 8 characters.'; return; }
+  if (!email || !pass) { errEl.textContent = 'All fields are required.'; return; }
+  if (pass.length < 8)  { errEl.textContent = 'Password must be at least 8 characters.'; return; }
 
   setBtnLoading('suBtn', true);
 
   try {
-    const invRef  = doc(db, 'invites', code);
-    const invSnap = await getDoc(invRef);
-
-    if (!invSnap.exists()) {
-      errEl.textContent = '❌ Activation code not found.';
-      setBtnLoading('suBtn', false); return;
-    }
-    if (invSnap.data().used === true) {
-      errEl.textContent = '❌ This code has already been used.';
-      setBtnLoading('suBtn', false); return;
-    }
-
     const cred = await createUserWithEmailAndPassword(auth, email, pass);
-
-    await updateDoc(invRef, {
-      used:   true,
-      usedBy: cred.user.uid,
-      usedAt: serverTimestamp()
-    });
 
     await setDoc(doc(db, 'users', cred.user.uid, 'profile', 'info'), {
       email,
-      createdAt:  serverTimestamp(),
-      inviteCode: code
+      createdAt: serverTimestamp()
     });
 
     okEl.textContent = '✅ Account created! Signing you in…';
